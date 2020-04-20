@@ -50,7 +50,7 @@ subprojects {
     }
 
     group = "io.opencensus"
-    version = "0.22.1" // CURRENT_OPENCENSUS_VERSION
+    version = "0.22.1.ocelot.1" // CURRENT_OPENCENSUS_VERSION
 
     sourceCompatibility = 1.7
     targetCompatibility = 1.7
@@ -370,28 +370,21 @@ subprojects {
     uploadArchives {
         repositories {
             mavenDeployer {
-                beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
-
-                def configureAuth = {
-                    if (rootProject.hasProperty('ossrhUsername') && rootProject.hasProperty('ossrhPassword')) {
-                        authentication(userName:rootProject.ossrhUsername, password: rootProject.ossrhPassword)
-                    }
+               // beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+                repository(url: "https://repository.novatec-gmbh.de/content/repositories/3rd_party_libs/") {
+                    authentication(userName: nexusUsername, password: nexusPassword)
                 }
-
-                repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/", configureAuth)
-
-                snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/", configureAuth)
 
                 pom.project {
                     name "OpenCensus"
                     packaging 'jar'
                     description project.description
-                    url 'https://github.com/census-instrumentation/opencensus-java'
+                    url 'https://github.com/inspectIT/opencensus-java'
 
                     scm {
-                        connection 'scm:svn:https://github.com/census-instrumentation/opencensus-java'
-                        developerConnection 'scm:git:git@github.com/census-instrumentation/opencensus-java'
-                        url 'https://github.com/census-instrumentation/opencensus-java'
+                        connection 'scm:svn:https://github.com/inspectIT/opencensus-java'
+                        developerConnection 'scm:git:git@github.com/inspectIT/opencensus-java'
+                        url 'https://github.com/inspectIT/opencensus-java'
                     }
 
                     licenses {
