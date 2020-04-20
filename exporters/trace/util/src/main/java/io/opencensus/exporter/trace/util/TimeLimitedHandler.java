@@ -61,10 +61,12 @@ public abstract class TimeLimitedHandler extends SpanExporter.Handler {
 
   private final Duration deadline;
   private final String exportSpanName;
+  private final TimeLimiter timeLimiter;
 
   protected TimeLimitedHandler(Duration deadline, String exportSpanName) {
     this.deadline = deadline;
     this.exportSpanName = exportSpanName;
+    timeLimiter = SimpleTimeLimiter.create(Executors.newSingleThreadExecutor());
   }
 
   /**
@@ -82,7 +84,6 @@ public abstract class TimeLimitedHandler extends SpanExporter.Handler {
   public void export(final Collection<SpanData> spanDataList) {
     final Scope exportScope = newExportScope();
     try {
-      TimeLimiter timeLimiter = SimpleTimeLimiter.create(Executors.newSingleThreadExecutor());
       timeLimiter.callWithTimeout(
           new Callable<Void>() {
             @Override
